@@ -1,5 +1,0 @@
-webrtcvad
-openai
-python-dotenv
-numpy
-"livekit-agents[openai]~=1.0"
