@@ -38,12 +38,14 @@ export const ChatEntry = ({
         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
           {!hideName && (
             <div className="flex items-center space-x-2">
-              <div className={cn(
-                "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white",
-                isUser
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600"
-                  : "bg-gradient-to-r from-gray-600 to-gray-700"
-              )}>
+              <div
+                className={cn(
+                  'flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium text-white',
+                  isUser
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600'
+                    : 'bg-gradient-to-r from-gray-600 to-gray-700'
+                )}
+              >
                 {isUser ? 'U' : 'T'}
               </div>
               <span className="font-medium text-gray-700 dark:text-white">
@@ -61,16 +63,15 @@ export const ChatEntry = ({
         </div>
       )}
 
-      <div className={cn(
-        'flex',
-        isUser ? 'justify-end' : 'justify-start'
-      )}>
-        <div className={cn(
-          'max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed min-w-0 shadow-sm',
-          isUser
-            ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
-            : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200/50 dark:border-gray-700/50'
-        )}>
+      <div className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
+        <div
+          className={cn(
+            'max-w-[85%] min-w-0 rounded-2xl px-5 py-3 text-sm leading-relaxed shadow-sm',
+            isUser
+              ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+              : 'border border-gray-200/50 bg-white text-gray-900 dark:border-gray-700/50 dark:bg-gray-800 dark:text-white'
+          )}
+        >
           <p className="whitespace-pre-wrap">{message}</p>
         </div>
       </div>

@@ -215,18 +215,23 @@
     animation-duration: 3s;
     animation-iteration-count: infinite;
     animation-name: text-shimmer;
-    background: var(--muted-foreground) gradient(linear,
+    background: var(--muted-foreground)
+      gradient(
+        linear,
         100% 0,
         0 0,
         from(var(--muted-foreground)),
         color-stop(0.5, var(--secondary-foreground)),
-        to(var(--muted-foreground)));
-    background: var(--muted-foreground) -webkit-gradient(linear,
+        to(var(--muted-foreground))
+      );
+    background: var(--muted-foreground) -webkit-gradient(
+        linear,
         100% 0,
         0 0,
         from(var(--muted-foreground)),
         color-stop(0.5, var(--secondary-foreground)),
-        to(var(--muted-foreground)));
+        to(var(--muted-foreground))
+      );
     background-repeat: no-repeat;
     background-size: 50% 200%;
     display: inline-block;
@@ -248,7 +253,6 @@
   }
 
   @keyframes float {
-
     0%,
     100% {
       transform: translateY(0px);
@@ -269,7 +273,9 @@
     }
 
     to {
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6);
+      box-shadow:
+        0 0 20px rgba(59, 130, 246, 0.8),
+        0 0 30px rgba(59, 130, 246, 0.6);
     }
   }
 
@@ -340,7 +346,6 @@
   }
 
   @keyframes status-pulse {
-
     0%,
     100% {
       opacity: 1;

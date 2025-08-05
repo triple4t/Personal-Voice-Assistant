@@ -18,7 +18,7 @@ export function ApplyThemeScript() {
 
     // Apply system theme immediately
     applySystemTheme();
-    
+
     // Listen for system theme changes
     const mediaQuery = window.matchMedia(THEME_MEDIA_QUERY);
     mediaQuery.addEventListener('change', applySystemTheme);

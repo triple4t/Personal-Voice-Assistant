@@ -9,9 +9,5 @@ export default async function AppLayout({ children }: AppLayoutProps) {
   const hdrs = await headers();
   const { companyName } = await getAppConfig(hdrs);
 
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

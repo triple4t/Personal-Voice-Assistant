@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   type AgentState,
@@ -9,7 +9,6 @@ import {
   useVoiceAssistant,
 } from '@livekit/components-react';
 import { toastAlert } from '@/components/alert-toast';
-
 import { ChatEntry } from '@/components/livekit/chat/chat-entry';
 import { ChatMessageView } from '@/components/livekit/chat/chat-message-view';
 import useChatAndTranscription from '@/hooks/useChatAndTranscription';
@@ -46,7 +45,7 @@ export const SessionView = ({
 
   // Clear chat when user starts speaking
   useEffect(() => {
-    const hasUserMessage = messages.some(msg => msg.from?.isLocal);
+    const hasUserMessage = messages.some((msg) => msg.from?.isLocal);
     if (hasUserMessage && !isUserSpeaking) {
       setIsUserSpeaking(true);
       // Clear previous messages when user starts talking
@@ -126,12 +125,12 @@ export const SessionView = ({
   const isAudioActive = agentState === 'speaking' || isUserSpeaking;
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="flex h-[100dvh] flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Top: Audio Visualizer */}
-      <div className="flex justify-center items-center p-8 pt-16">
+      <div className="flex items-center justify-center p-8 pt-16">
         <div className="text-center">
           <AudioVisualizer isActive={isAudioActive} className="mb-4" />
-          <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+          <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             {agentState === 'speaking' && 'Agent is speaking...'}
             {agentState === 'listening' && 'Listening...'}
             {agentState === 'thinking' && 'Thinking...'}
@@ -145,25 +144,27 @@ export const SessionView = ({
       <main
         ref={ref}
         inert={disabled}
-        className="flex-1 flex flex-col justify-center bg-white/80 dark:bg-gray-900/80 p-4 md:p-8 rounded-2xl mx-4 mb-4 shadow-xl"
+        className="mx-4 mb-4 flex flex-1 flex-col justify-center rounded-2xl bg-white/80 p-4 shadow-xl md:p-8 dark:bg-gray-900/80"
       >
         {/* Friendly prompt */}
-        <div className="mb-6 mt-2 text-center">
-          <p className="text-lg font-medium text-blue-700 dark:text-blue-200">Say "hello" to start the conversation!</p>
+        <div className="mt-2 mb-6 text-center">
+          <p className="text-lg font-medium text-blue-700 dark:text-blue-200">
+            Say &quot;hello&quot; to start the conversation!
+          </p>
         </div>
 
         {/* Chat Messages - Centered */}
-        <div className="flex-1 flex flex-col pt-4 pb-24">
+        <div className="flex flex-1 flex-col pt-4 pb-24">
           <div
             ref={chatContainerRef}
-            className="flex-1 overflow-y-auto px-4 scroll-smooth"
+            className="flex-1 overflow-y-auto scroll-smooth px-4"
             style={{
               scrollBehavior: 'smooth',
               scrollbarWidth: 'thin',
-              scrollbarColor: 'rgba(0,0,0,0.2) transparent'
+              scrollbarColor: 'rgba(0,0,0,0.2) transparent',
             }}
           >
-            <div className="max-w-4xl mx-auto h-full flex items-center justify-center">
+            <div className="mx-auto flex h-full max-w-4xl items-center justify-center">
               <div className="w-full max-w-3xl">
                 <ChatMessageView className="h-auto">
                   <div className="space-y-4 whitespace-pre-wrap">
@@ -172,18 +173,29 @@ export const SessionView = ({
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          className="text-center py-12"
+                          className="py-12 text-center"
                         >
-                          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-gray-800 mb-4">
-                            <svg className="w-8 h-8 text-blue-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800">
+                            <svg
+                              className="h-8 w-8 text-blue-500 dark:text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                              />
                             </svg>
                           </div>
-                          <h3 className="text-lg font-medium text-blue-700 dark:text-white mb-2">
+                          <h3 className="mb-2 text-lg font-medium text-blue-700 dark:text-white">
                             Start the conversation
                           </h3>
-                          <p className="text-blue-500 dark:text-white max-w-md mx-auto">
-                            Ask me anything about my background, projects, or expertise in AI development. I'm here to help!
+                          <p className="mx-auto max-w-md text-blue-500 dark:text-white">
+                            Ask me anything about my background, projects, or expertise in AI
+                            development. I&apos;m here to help!
                           </p>
                         </motion.div>
                       ) : (
@@ -194,7 +206,7 @@ export const SessionView = ({
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3, ease: 'easeOut' }}
-                            className="bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6"
+                            className="rounded-2xl border border-gray-200 bg-white/90 p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/90"
                           >
                             <ChatEntry hideName key={message.id} entry={message} />
                           </motion.div>
