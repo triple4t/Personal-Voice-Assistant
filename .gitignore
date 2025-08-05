@@ -180,6 +180,8 @@ yarn-error.log*
 # Vercel
 .vercel
 
+/voice-assistant/voice_assistant_*
+
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
@@ -401,8 +403,6 @@ tmp/
 *.bak
 *.backup
 *.old
-
-/voice-assistant/voice_assistant_*
 
 # ===== ENVIRONMENT FILES =====
 
