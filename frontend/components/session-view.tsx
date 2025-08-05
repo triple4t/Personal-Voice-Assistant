@@ -16,7 +16,7 @@ import useChatAndTranscription from '@/hooks/useChatAndTranscription';
 import { useDebugMode } from '@/hooks/useDebug';
 import type { AppConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { WaveformBar } from './waveform-bar';
+import { AudioVisualizer } from './waveform-bar';
 
 function isAgentAvailable(agentState: AgentState) {
   return agentState == 'listening' || agentState == 'thinking' || agentState == 'speaking';
@@ -41,7 +41,6 @@ export const SessionView = ({
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [displayMessages, setDisplayMessages] = useState<ReceivedChatMessage[]>([]);
   const [isUserSpeaking, setIsUserSpeaking] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
 
   useDebugMode();
 
@@ -97,20 +96,6 @@ export const SessionView = ({
     await send(message);
   }
 
-  const toggleMute = async () => {
-    try {
-      if (isMuted) {
-        await room.localParticipant.setMicrophoneEnabled(true);
-        setIsMuted(false);
-      } else {
-        await room.localParticipant.setMicrophoneEnabled(false);
-        setIsMuted(true);
-      }
-    } catch (error) {
-      console.error('Error toggling microphone:', error);
-    }
-  };
-
   useEffect(() => {
     if (sessionStarted) {
       const timeout = setTimeout(() => {
@@ -137,55 +122,37 @@ export const SessionView = ({
     }
   }, [agentState, sessionStarted, room]);
 
-
+  // Determine if audio visualization should be active
+  const isAudioActive = agentState === 'speaking' || isUserSpeaking;
 
   return (
-    <div className="flex flex-col md:flex-row h-[100dvh] bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Left: Agent info and waveform */}
-      <div className="md:w-1/3 w-full flex flex-col items-center justify-center p-8 bg-white/80 dark:bg-gray-900/80 rounded-2xl m-4 shadow-xl">
-        <div className="mb-6 mt-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">Agent</h2>
-          <WaveformBar isActive={isUserSpeaking} color="#3b82f6" barCount={12} height={48} className="mx-auto" />
-          
-          {/* Mute/Unmute Button */}
-          <div className="mt-6">
-            <button
-              onClick={toggleMute}
-              className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-200 ${
-                isMuted 
-                  ? 'bg-red-500 hover:bg-red-600 text-white' 
-                  : 'bg-blue-500 hover:bg-blue-600 text-white'
-              }`}
-              title={isMuted ? 'Unmute' : 'Mute'}
-            >
-              {isMuted ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-              )}
-            </button>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 text-center">
-              {isMuted ? 'Unmute' : 'Mute'}
-            </p>
+    <div className="flex flex-col h-[100dvh] bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Top: Audio Visualizer */}
+      <div className="flex justify-center items-center p-8 pt-16">
+        <div className="text-center">
+          <AudioVisualizer isActive={isAudioActive} className="mb-4" />
+          <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            {agentState === 'speaking' && 'Agent is speaking...'}
+            {agentState === 'listening' && 'Listening...'}
+            {agentState === 'thinking' && 'Thinking...'}
+            {agentState === 'connecting' && 'Connecting...'}
+            {!isAgentAvailable(agentState) && 'Ready to chat'}
           </div>
         </div>
       </div>
-      {/* Right: Chat area */}
+
+      {/* Center: Chat area */}
       <main
         ref={ref}
         inert={disabled}
-        className="flex-1 flex flex-col justify-end bg-white/80 dark:bg-gray-900/80 p-4 md:p-8 rounded-2xl m-4 shadow-xl"
+        className="flex-1 flex flex-col justify-center bg-white/80 dark:bg-gray-900/80 p-4 md:p-8 rounded-2xl mx-4 mb-4 shadow-xl"
       >
         {/* Friendly prompt */}
         <div className="mb-6 mt-2 text-center">
           <p className="text-lg font-medium text-blue-700 dark:text-blue-200">Say "hello" to start the conversation!</p>
         </div>
-        {/* Chat Messages - Full Screen */}
+
+        {/* Chat Messages - Centered */}
         <div className="flex-1 flex flex-col pt-4 pb-24">
           <div
             ref={chatContainerRef}

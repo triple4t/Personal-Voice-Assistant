@@ -1,14 +1,133 @@
 import React, { useEffect, useRef } from 'react';
 
-interface WaveformBarProps {
+interface AudioVisualizerProps {
+    isActive: boolean;
+    className?: string;
+}
+
+export const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
+    isActive,
+    className = '',
+}) => {
+    const [heights, setHeights] = React.useState<number[]>([20, 30, 40, 25, 20]);
+    const raf = useRef<number>();
+
+    useEffect(() => {
+        let running = true;
+        function animate() {
+            if (!running) return;
+            const now = Date.now() / 200;
+            setHeights(
+                Array.from({ length: 5 }, (_, i) => {
+                    if (!isActive) return 20;
+                    // Create varying heights for the shapes
+                    const baseHeight = [30, 45, 60, 35, 25][i];
+                    const variation = Math.sin(now + i * 0.8) * 15;
+                    return Math.max(15, baseHeight + variation);
+                })
+            );
+            raf.current = requestAnimationFrame(animate);
+        }
+        animate();
+        return () => {
+            running = false;
+            if (raf.current) cancelAnimationFrame(raf.current);
+        };
+    }, [isActive]);
+
+    return (
+        <div className={`flex items-end justify-center gap-3 ${className}`}>
+            {/* Circle */}
+            <div
+                className={`transition-all duration-150 ${
+                    isActive ? 'shadow-[0_0_20px_4px_rgba(255,255,255,0.6)]' : ''
+                }`}
+                style={{
+                    width: `${heights[0]}px`,
+                    height: `${heights[0]}px`,
+                    borderRadius: '50%',
+                    background: isActive
+                        ? 'rgba(255, 255, 255, 0.9)'
+                        : 'rgba(255, 255, 255, 0.3)',
+                    opacity: isActive ? 1 : 0.5,
+                }}
+            />
+            
+            {/* Tall vertical oval */}
+            <div
+                className={`transition-all duration-150 ${
+                    isActive ? 'shadow-[0_0_20px_4px_rgba(255,255,255,0.6)]' : ''
+                }`}
+                style={{
+                    width: `${heights[1] * 0.4}px`,
+                    height: `${heights[1]}px`,
+                    borderRadius: '50%',
+                    background: isActive
+                        ? 'rgba(255, 255, 255, 0.9)'
+                        : 'rgba(255, 255, 255, 0.3)',
+                    opacity: isActive ? 1 : 0.5,
+                }}
+            />
+            
+            {/* Largest vertical oval */}
+            <div
+                className={`transition-all duration-150 ${
+                    isActive ? 'shadow-[0_0_20px_4px_rgba(255,255,255,0.6)]' : ''
+                }`}
+                style={{
+                    width: `${heights[2] * 0.5}px`,
+                    height: `${heights[2]}px`,
+                    borderRadius: '50%',
+                    background: isActive
+                        ? 'rgba(255, 255, 255, 0.9)'
+                        : 'rgba(255, 255, 255, 0.3)',
+                    opacity: isActive ? 1 : 0.5,
+                }}
+            />
+            
+            {/* Circle */}
+            <div
+                className={`transition-all duration-150 ${
+                    isActive ? 'shadow-[0_0_20px_4px_rgba(255,255,255,0.6)]' : ''
+                }`}
+                style={{
+                    width: `${heights[3]}px`,
+                    height: `${heights[3]}px`,
+                    borderRadius: '50%',
+                    background: isActive
+                        ? 'rgba(255, 255, 255, 0.9)'
+                        : 'rgba(255, 255, 255, 0.3)',
+                    opacity: isActive ? 1 : 0.5,
+                }}
+            />
+            
+            {/* Circle */}
+            <div
+                className={`transition-all duration-150 ${
+                    isActive ? 'shadow-[0_0_20px_4px_rgba(255,255,255,0.6)]' : ''
+                }`}
+                style={{
+                    width: `${heights[4]}px`,
+                    height: `${heights[4]}px`,
+                    borderRadius: '50%',
+                    background: isActive
+                        ? 'rgba(255, 255, 255, 0.9)'
+                        : 'rgba(255, 255, 255, 0.3)',
+                    opacity: isActive ? 1 : 0.5,
+                }}
+            />
+        </div>
+    );
+};
+
+// Keep the old component for backward compatibility
+export const WaveformBar: React.FC<{
     isActive: boolean;
     color?: string;
     barCount?: number;
     height?: number;
     className?: string;
-}
-
-export const WaveformBar: React.FC<WaveformBarProps> = ({
+}> = ({
     isActive,
     color = '#3b82f6',
     barCount = 12,
