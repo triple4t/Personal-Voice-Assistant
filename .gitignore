@@ -381,8 +381,8 @@ public
 
 # ===== PROJECT SPECIFIC =====
 
-# LiveKit specific
-livekit/
+# LiveKit specific - uncomment if you want to ignore livekit files
+# livekit/
 
 # KMS logs
 backend/KMS/logs/
