@@ -79,7 +79,6 @@ sounddevice==0.5.2
 starlette==0.47.2
 sympy==1.14.0
 tokenizers==0.21.2
-torch>=2.0
 tqdm==4.67.1
 transformers==4.54.0
 types-protobuf==4.25.0.20240417
