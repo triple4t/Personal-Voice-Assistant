@@ -46,9 +46,26 @@ export default function VoiceAgentRoom({ url, token, agentIdentity }: VoiceAgent
   }, [url, token, agentIdentity]);
 
   return (
-    <div>
-      <audio ref={agentAudioRef} autoPlay />
-      {/* Add UI for mute/unmute, leave, etc. if needed */}
+    <div
+      className="w-full max-w-md mx-auto flex flex-col items-center justify-center min-h-[40vh] p-4 sm:p-6 md:p-8 bg-white dark:bg-zinc-900 rounded-lg shadow-lg border border-zinc-200 dark:border-zinc-800"
+    >
+      <audio ref={agentAudioRef} autoPlay className="w-full max-w-xs my-4" />
+      {/* Responsive controls placeholder */}
+      <div className="flex flex-col sm:flex-row gap-2 w-full justify-center mt-2">
+        {/* Example: Mute/Unmute and Leave buttons (not implemented) */}
+        <button
+          className="px-4 py-2 rounded bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition w-full sm:w-auto"
+          disabled
+        >
+          Mute/Unmute
+        </button>
+        <button
+          className="px-4 py-2 rounded bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition w-full sm:w-auto"
+          disabled
+        >
+          Leave
+        </button>
+      </div>
     </div>
   );
 }
